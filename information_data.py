@@ -15,9 +15,11 @@ notes_text = ('📚 *Тут представлены все конспекты �
               '\n\n🎓2 курс'
               '\n🔹 [Русский язык и культура речи](https://docs.google.com/document/d/1-BhyeqoABLtoT5QiVpoMlv-EePHYCvY09xbGV7mvlvg/edit?usp=sharing)'
               '\n🔹 [Психология](https://docs.google.com/document/d/10sJjhM0F8_Zd_NV87yKrEln5Bz0bjJO0aRFOhXLMGeE/edit?usp=sharing)'
-              '\n🔹 [Социология](https://docs.google.com/document/d/113sPjAJuUswHCVkkoLB0tn-XbUDo7effbQeLmMS-aDg/edit?usp=sharing)'
-              '\n🔹 [Концепция современного естествознания](https://docs.google.com/document/d/11lWxgRAiKahe9Rh_wumh0LaIGCaKkCbK8wETYbZSACo/edit?usp=sharing)'
-              '\n🔹 [ТРПО](https://docs.google.com/document/d/117MLNEERUi_1Rr2-XLrmDPUyLZkSjen1OAM5cUn5bAM/edit?usp=sharing)'
+              '\n🔹 [Социология](https://docs.google.com/document/d/117MLNEERUi_1Rr2-XLrmDPUyLZkSjen1OAM5cUn5bAM/edit?usp=sharing)'
+              '\n🔹 [Концепция современного естествознания](https://docs.google.com/document/d/113sPjAJuUswHCVkkoLB0tn-XbUDo7effbQeLmMS-aDg/edit?usp=sharing)'
+              '\n🔹 [ТРПО](https://docs.google.com/document/d/11lWxgRAiKahe9Rh_wumh0LaIGCaKkCbK8wETYbZSACo/edit?usp=sharing)'
+              '\n🔹 [ОРГ](https://docs.google.com/document/d/14xTvaqrC6bsXVTZ5y66A3CZgEkdTZPziQWaOzg8zzwg/edit?usp=sharing)'
+              '\n🔹 [ЭВМ](https://docs.google.com/document/d/11nLQzRagT8pUu-snuCcxXEW0qsXr9xwv_Lvg_tMGoqs/edit?usp=sharing)'
               '\n\n❓ По секрету - всё кликабельно)'
               '')
 
@@ -29,10 +31,11 @@ all_files_text = ('Тут представлены все файлы, загру
 search_files_text = ('Выберите предмет')
 
 #Важно, что key совпадал с названием папки, в которой находятся файлы
+#Название не должно быть слишком большим
 subjects_homework = {
-    'russianlanguage': 'Русский язык',
+    'russian': 'Русский язык',
     'psychology': 'Психология',
-    'operationsystems': 'Операционные системы',
+    'osys': 'Операционные системы',
     'infotech': 'ИТ',
     'TRPO': 'ТРПО',
     'other': 'Другое'
@@ -41,11 +44,11 @@ subjects_homework = {
 file_path_homework = 'homework_files'
 
 subjects_others = {
-    'operationsystems': 'ОС',
+    'osys': 'ОС',
     'asd': 'АСД',
     'infotech': 'ИТ',
     'TRPO': 'ТРПО',
-    '': ''
+    'IBM': 'ЭВМ'
 }
 
 file_types_others = {
@@ -63,5 +66,7 @@ back_text = "◀️ Назад"
 
 FILES_PER_PAGE = 8  # Количество файлов на одной странице
 HOMEWORK_FILES_PER_PAGE = 8  # Для домашних работ
+
+admins_id = ['', '']
 
 
