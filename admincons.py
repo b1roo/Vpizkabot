@@ -25,7 +25,7 @@ def setup_admin(bot):
     @bot.callback_query_handler(func=lambda call: call.data == 'git_upload')
     def git_upload(call):
         '''Обновление бота через git'''
-        subprocess.run(['nohup', information_data.sh_path, 'git_upload', '&'])
+        subprocess.run(['nohup', information_data.sh_path, 'git_upload', "&"])
 
     @bot.callback_query_handler(func=lambda call: call.data == 'restart_bot')
     def restart_bot(call):
