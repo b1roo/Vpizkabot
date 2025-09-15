@@ -43,5 +43,4 @@ def setup_admin(bot):
         bot.send_message(call.message.chat.id, 'Останавливаем работу бота...')
         # os.kill(os.getpid(), signal.SIGINT)
         # subprocess.run(["./stop_bot.sh"])
-        subprocess.run(["./stop_bot.sh"], 
-                  capture_output=True, text=True)
+        subprocess.run(["./stop_bot.sh"])
