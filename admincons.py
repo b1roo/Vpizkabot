@@ -7,7 +7,6 @@ import subprocess
 def setup_admin(bot):
     @bot.message_handler(commands=['checkid'])
     def check_id(message):
-        # print(message.from_user.id)
         bot.send_message(message.chat.id, message.from_user.id)
 
     @bot.message_handler(commands=['admin'])
