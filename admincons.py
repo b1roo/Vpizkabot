@@ -15,8 +15,9 @@ def setup_admin(bot):
         if cur_id in information_data.admins_id:
             keyboard = types.InlineKeyboardMarkup()
             keyboard.add(types.InlineKeyboardButton(text="Обновить бота на хосте (с перезагрузкой)", callback_data="git_upload"))
-            keyboard.add(types.InlineKeyboardButton(text="Остановить работу бота (крайний случай)", callback_data="stop_bot"))
             keyboard.add(types.InlineKeyboardButton(text="Перезагрузить бота", callback_data="restart_bot"))
+            keyboard.add(types.InlineKeyboardButton(text="Остановить работу бота (крайний случай)", callback_data="stop_bot"))
+            
             # keyboard.add(types.InlineKeyboardButton(text="", callback_data=""))
             bot.send_message(message.chat.id, 'Выберете нужное действие:', reply_markup=keyboard)
         # else:
@@ -25,7 +26,8 @@ def setup_admin(bot):
     @bot.callback_query_handler(func=lambda call: call.data == 'git_upload')
     def git_upload(call):
         '''Обновление бота через git'''
-        subprocess.run(['nohup', information_data.sh_path, 'git_upload', "&"])
+        # subprocess.run(['nohup', information_data.sh_path, 'git_upload', "&"])
+        subprocess.run(["/bin/bash", "/home/deaaad/Vpizkabot/update_bot.sh"])
 
     @bot.callback_query_handler(func=lambda call: call.data == 'restart_bot')
     def restart_bot(call):
@@ -39,4 +41,5 @@ def setup_admin(bot):
     def stop_bot(call):
         '''Остановка работы бота'''
         bot.send_message(call.message.chat.id, 'Останавливаем работу бота...')
-        os.kill(os.getpid(), signal.SIGINT)
+        # os.kill(os.getpid(), signal.SIGINT)
+        subprocess.run(["/bin/bash", "/home/deaaad/Vpizkabot/stop_bot.sh"])
