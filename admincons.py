@@ -30,8 +30,9 @@ def setup_admin(bot):
     @bot.callback_query_handler(func=lambda call: call.data == 'restart_bot')
     def restart_bot(call):
         '''Рестарт работы бота'''
-        subprocess.run(['nohup, "", 'restart_bot.sh', '&'])
+        # subprocess.run(['nohup, "", 'restart_bot.sh', '&'])
         # print("./restart_bot.sh")
+        subprocess.run(["/bin/bash", "/home/deaaad/Vpizkabot/restart_bot.sh"])
 
 
     @bot.callback_query_handler(func=lambda call: call.data == 'stop_bot')
