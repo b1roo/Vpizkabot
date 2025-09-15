@@ -19,8 +19,8 @@ def setup_admin(bot):
             keyboard.add(types.InlineKeyboardButton(text="Перезагрузить бота", callback_data="restart_bot"))
             # keyboard.add(types.InlineKeyboardButton(text="", callback_data=""))
             bot.send_message(message.chat.id, 'Выберете нужное действие:', reply_markup=keyboard)
-        else:
-            bot.send_message(message.chat.id, 'У вас нат доступа к этой команде. \help', disable_web_page_preview=True)
+        # else:
+        #     bot.send_message(message.chat.id, 'У вас нат доступа к этой команде. \help', disable_web_page_preview=True)
 
     @bot.callback_query_handler(func=lambda call: call.data == 'git_upload')
     def git_upload(call):
