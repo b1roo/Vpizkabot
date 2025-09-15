@@ -67,6 +67,6 @@ back_text = "◀️ Назад"
 FILES_PER_PAGE = 8  # Количество файлов на одной странице
 HOMEWORK_FILES_PER_PAGE = 8  # Для домашних работ
 
-admins_id = ['', '']
+admins_id = [1135316756, 1044378766]
 
 
