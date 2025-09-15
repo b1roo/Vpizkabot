@@ -69,4 +69,4 @@ HOMEWORK_FILES_PER_PAGE = 8  # Для домашних работ
 
 admins_id = [1135316756, 1044378766]
 
-
+sh_path = 'sh_files'

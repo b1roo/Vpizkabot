@@ -21,5 +21,5 @@ def start_help_mes(message):
                      disable_web_page_preview=True)
 
 if __name__ == "__main__":
-    print("Бот запущен...")
+    # print("Бот запущен...")
     bot.polling(none_stop=True)
