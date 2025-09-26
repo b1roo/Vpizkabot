@@ -1,8 +1,11 @@
-import signal
 import os
+import sys
+import time
+import threading
+import subprocess
 from telebot import types
 import information_data
-import subprocess
+
 
 def setup_admin(bot):
     @bot.message_handler(commands=['checkid'])
@@ -14,33 +17,108 @@ def setup_admin(bot):
         cur_id = message.from_user.id
         if cur_id in information_data.admins_id:
             keyboard = types.InlineKeyboardMarkup()
-            keyboard.add(types.InlineKeyboardButton(text="Обновить бота на хосте (с перезагрузкой)", callback_data="git_upload"))
-            keyboard.add(types.InlineKeyboardButton(text="Перезагрузить бота", callback_data="restart_bot"))
-            keyboard.add(types.InlineKeyboardButton(text="Остановить работу бота (крайний случай)", callback_data="stop_bot"))
-            
-            # keyboard.add(types.InlineKeyboardButton(text="", callback_data=""))
+            keyboard.add(types.InlineKeyboardButton(
+                text="🔄 Перезагрузить бота (автообновление с git)",
+                callback_data="ask_restart_bot"))
+            keyboard.add(types.InlineKeyboardButton(
+                text="❌ Остановить работу бота (крайний случай)",
+                callback_data="ask_stop_bot"))
+
             bot.send_message(message.chat.id, 'Выберете нужное действие:', reply_markup=keyboard)
-        # else:
-        #     bot.send_message(message.chat.id, 'У вас нат доступа к этой команде. \help', disable_web_page_preview=True)
+        else:
+            bot.send_message(message.chat.id, '❌ У вас нет прав для выполнения данной команды!')
 
-    @bot.callback_query_handler(func=lambda call: call.data == 'git_upload')
-    def git_upload(call):
-        '''Обновление бота через git'''
-        # subprocess.run(['nohup', information_data.sh_path, 'git_upload', "&"])
-        subprocess.run(["/bin/bash", "/home/deaaad/Vpizkabot/update_bot.sh"])
+    # Обработчик подтверждения перезапуска
+    @bot.callback_query_handler(func=lambda call: call.data == 'ask_restart_bot')
+    def ask_restart_bot(call):
+        keyboard = types.InlineKeyboardMarkup()
+        keyboard.row(
+            types.InlineKeyboardButton(text="✅ Подтвердить", callback_data="confirm_restart_bot"),
+            types.InlineKeyboardButton(text="❌ Отменить", callback_data="cancel_action")
+        )
+        bot.edit_message_text(
+            "⚠️ Вы уверены, что хотите перезагрузить бота?\n\n"
+            "Бот будет недоступен на время перезапуска.",
+            call.message.chat.id,
+            call.message.message_id,
+            reply_markup=keyboard
+        )
 
-    @bot.callback_query_handler(func=lambda call: call.data == 'restart_bot')
-    def restart_bot(call):
-        '''Рестарт работы бота'''
-        # subprocess.run(['nohup, "", 'restart_bot.sh', '&'])
-        # print("./restart_bot.sh")
-        subprocess.run(["/bin/bash", "/home/deaaad/Vpizkabot/restart_bot.sh"])
+    # Обработчик подтверждения остановки
+    @bot.callback_query_handler(func=lambda call: call.data == 'ask_stop_bot')
+    def ask_stop_bot(call):
+        keyboard = types.InlineKeyboardMarkup()
+        keyboard.row(
+            types.InlineKeyboardButton(text="✅ Подтвердить", callback_data="confirm_stop_bot"),
+            types.InlineKeyboardButton(text="❌ Отменить", callback_data="cancel_action")
+        )
+        bot.edit_message_text(
+            "🚨 ВЫ УВЕРЕНЫ, ЧТО ХОТИТЕ ОСТАНОВИТЬ БОТА?\n\n"
+            "Это действие приведет к полной остановке работы бота!",
+            call.message.chat.id,
+            call.message.message_id,
+            reply_markup=keyboard
+        )
+
+    # Подтвержденный рестарт
+    @bot.callback_query_handler(func=lambda call: call.data == 'confirm_restart_bot')
+    def confirm_restart_bot(call):
+        bot.answer_callback_query(call.id, "🔄 Перезапуск...")
+        bot.edit_message_text(
+            "🔄 Перезапускаю бота...\n\n"
+            "Бот будет снова доступен через несколько секунд.",
+            call.message.chat.id,
+            call.message.message_id
+        )
+        threading.Timer(0, restart_bot_delayed).start()
+
+    # Подтвержденная остановка
+    @bot.callback_query_handler(func=lambda call: call.data == 'confirm_stop_bot')
+    def confirm_stop_bot(call):
+        bot.answer_callback_query(call.id, "🛑 Остановка...")
+        bot.edit_message_text(
+            "🛑 Останавливаю работу бота...\n\n"
+            "Бот будет полностью выключен!",
+            call.message.chat.id,
+            call.message.message_id
+        )
+        threading.Timer(0, stop_bot_delayed).start()
+
+    # Универсальная отмена
+    @bot.callback_query_handler(func=lambda call: call.data == 'cancel_action')
+    def cancel_action(call):
+        bot.answer_callback_query(call.id, "❌ Действие отменено")
+
+        keyboard = types.InlineKeyboardMarkup()
+        keyboard.add(types.InlineKeyboardButton(
+            text="🔄 Перезагрузить бота (автообновление с git)",
+            callback_data="ask_restart_bot"))
+        keyboard.add(types.InlineKeyboardButton(
+            text="❌ Остановить работу бота (крайний случай)",
+            callback_data="ask_stop_bot"))
+
+        bot.edit_message_text(
+            f"❌ Действие отменено.\n\nВыберете нужное действие:",
+            call.message.chat.id,
+            call.message.message_id,
+            reply_markup=keyboard
+        )
 
 
-    @bot.callback_query_handler(func=lambda call: call.data == 'stop_bot')
-    def stop_bot(call):
-        '''Остановка работы бота'''
-        bot.send_message(call.message.chat.id, 'Останавливаем работу бота...')
-        # os.kill(os.getpid(), signal.SIGINT)
-        # subprocess.run(["./stop_bot.sh"])
-        subprocess.run(["./stop_bot.sh"])
+def restart_bot_delayed():
+    """Перезапуск процесса бота"""
+    time.sleep(2)
+    # try:
+    #     print("🔄 Обновление кода из git...")
+    #     # subprocess.call(["git", "pull"])
+    # except Exception as e:
+    #     print(f"⚠️ Ошибка git pull: {e}")
+    # print("♻️ Перезапуск Python процесса...")
+    os.execl(sys.executable, sys.executable, *sys.argv)
+
+
+def stop_bot_delayed():
+    """Полная остановка бота"""
+    time.sleep(2)
+    print("🛑 Остановка по команде администратора...")
+    os._exit(0)

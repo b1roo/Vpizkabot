@@ -11,9 +11,9 @@ bot = TeleBot(BOT_TOKEN)
 
 setup_base_handlers(bot)
 setup_homework_handlers(bot)
+setup_admin(bot)
 setup_other_files_handlers(bot)
 setup_upload_handlers(bot)
-setup_admin(bot)
 
 @bot.message_handler()
 def start_help_mes(message):
@@ -23,3 +23,4 @@ def start_help_mes(message):
 if __name__ == "__main__":
     # print("Бот запущен...")
     bot.polling(none_stop=True)
+
