@@ -18,8 +18,7 @@ def setup_admin(bot):
         if cur_id in information_data.admins_id:
             keyboard = types.InlineKeyboardMarkup()
             keyboard.add(types.InlineKeyboardButton(
-                text="❌ Остановить работу бота (обновление/рестарт)\n\n"
-                     "Хост сам его перезапускает",
+                text="❌ Остановить работу бота (обновление/рестарт)\n\n",
                 callback_data="ask_stop_bot"))
 
             bot.send_message(message.chat.id, 'Выберете нужное действие:', reply_markup=keyboard)
@@ -36,7 +35,8 @@ def setup_admin(bot):
         )
         bot.edit_message_text(
             "🚨 ВЫ УВЕРЕНЫ, ЧТО ХОТИТЕ ОСТАНОВИТЬ БОТА?\n\n"
-            "Это действие приведет к полной остановке работы бота!",
+            "Это действие приведет к перезагрузке/обновлению бота!"
+            "Хост сам его перезапускает.",
             call.message.chat.id,
             call.message.message_id,
             reply_markup=keyboard
